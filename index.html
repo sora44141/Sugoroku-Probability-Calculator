@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="すごろくで指定したマス目に止まる確率を計算するツール" />
+    <title>すごろく到達確率計算機</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">SUGOROKU PROBABILITY</p>
+        <h1>すごろく到達確率計算機</h1>
+        <p>サイコロの面数とマス番号から、そのマスに<strong>ちょうど止まる確率</strong>を求めます。</p>
+      </header>
+
+      <section class="calculator" aria-labelledby="calculator-title">
+        <h2 id="calculator-title">条件を入力</h2>
+        <form id="probability-form" novalidate>
+          <div class="input-grid">
+            <label>
+              <span>サイコロの面数</span>
+              <span class="input-wrap">
+                <input id="faces" name="faces" type="number" min="1" max="1000" value="6" inputmode="numeric" required />
+                <span>面</span>
+              </span>
+            </label>
+            <label>
+              <span>止まりたいマス番号</span>
+              <span class="input-wrap">
+                <input id="target" name="target" type="number" min="0" max="100000" value="10" inputmode="numeric" required />
+                <span>マス</span>
+              </span>
+            </label>
+          </div>
+          <p class="input-condition">入力条件：面数は1〜1,000面、マス番号は0〜100,000マスの整数です。</p>
+          <p id="error-message" class="error-message" role="alert" aria-live="polite"></p>
+          <button type="submit">確率を計算する</button>
+        </form>
+      </section>
+
+      <section class="result" aria-labelledby="result-title" aria-live="polite">
+        <p class="result-label" id="result-title">計算結果</p>
+        <p class="result-copy"><span id="faces-result">6</span>面サイコロで <span id="target-result">10</span> マス目に止まる確率</p>
+        <output id="probability" class="probability">—</output>
+        <p id="decimal" class="decimal">—</p>
+        <p id="result-note" class="result-note"></p>
+      </section>
+
+      <section class="details" aria-labelledby="details-title">
+        <div>
+          <p class="eyebrow">HOW IT WORKS</p>
+          <h2 id="details-title">計算方法</h2>
+          <p>スタート地点を0マス目とし、1回ごとに出た目の数だけ前へ進むものとします。後戻りがないため、一度通り過ぎたマスには戻れません。</p>
+          <p>nマス目に止まる確率は、直前の1〜mマスから到達する確率の平均です。</p>
+          <p class="formula">P(0) = 1　/　P(n) = (P(n−1) + … + P(n−m)) ÷ m</p>
+        </div>
+        <div class="nearby-panel">
+          <h3>周辺の確率</h3>
+          <p>指定マスの前後を比較できます。</p>
+          <div id="nearby-list" class="nearby-list" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <footer>公平な m 面サイコロを仮定しています。</footer>
+    </main>
+    <div id="calculation-animation" class="calculation-animation" role="status" aria-live="assertive" aria-label="確率を計算しています" aria-hidden="true">
+      <div class="animation-card">
+        <p class="eyebrow">CALCULATING</p>
+        <h2>サイコロを振って計算中…</h2>
+        <div class="board-animation" aria-hidden="true">
+          <div class="walker"><span class="head"></span><span class="body"></span><span class="arm arm-left"></span><span class="arm arm-right"></span><span class="leg leg-left"></span><span class="leg leg-right"></span></div>
+          <span class="direction-arrow">→</span>
+          <span class="board-square"></span><span class="board-square"></span><span class="board-square"></span><span class="board-square"></span><span class="board-square"></span><span class="board-square"></span>
+        </div>
+        <p>到達確率を求めています</p>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
